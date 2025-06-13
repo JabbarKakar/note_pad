@@ -40,7 +40,7 @@ class DrawingToolbar extends StatefulWidget {
 }
 
 class _DrawingToolbarState extends State<DrawingToolbar> {
-  bool _isMinimized = false;
+  bool _isMinimized = true;
   Offset _position = const Offset(16, 100);
   bool _isDragging = false;
 

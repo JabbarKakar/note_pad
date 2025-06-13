@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:note_pad/widgets/note_listTile.dart';
 import 'package:uuid/uuid.dart';
 import '../models/note.dart';
+import '../models/page.dart';
 import 'drawing_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,7 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
       title: _generateUntitledName(),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      strokes: [],
+      pages: [
+        NotePage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          strokes: [],
+          backgroundColor: Colors.white,
+        ),
+      ],
+      strokes: [], // Initialize empty strokes for backward compatibility
     );
 
     setState(() {
@@ -145,46 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: _notes.length,
               itemBuilder: (context, index) {
                 final note = _notes[index];
-                return Dismissible(
-                  key: Key(note.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 16),
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onDismissed: (direction) => _deleteNote(note),
-                  child: ListTile(
-                    leading: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: note.backgroundColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: note.strokes.isEmpty
-                          ? const Icon(Icons.edit, color: Colors.grey)
-                          : null,
-                    ),
-                    title: Text(
-                      note.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      'Last edited: ${_formatDate(note.updatedAt)}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    onTap: () => _openNote(note),
-                  ),
+                return NoteListTile(
+                  id: note.id,
+                  title: note.title,
+                  backgroundColor: note.backgroundColor,
+                  hasStrokes: note.strokes.isNotEmpty || note.pages.first.strokes.isNotEmpty,
+                  lastEditedText: 'Last edited: ${_formatDate(note.updatedAt)}',
+                  onTap: () => _openNote(note),
+                  onDelete: () => _deleteNote(note),
                 );
               },
             ),

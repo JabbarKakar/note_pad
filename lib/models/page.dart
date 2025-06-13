@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:note_pad/models/stroke.dart';
+import 'stroke.dart';
 
-class DrawingPage {
+class NotePage {
+  final String id;
   final List<Stroke> strokes;
   final Color backgroundColor;
 
-  DrawingPage({
+  NotePage({
+    required this.id,
     required this.strokes,
     this.backgroundColor = Colors.white,
   });
 
-  DrawingPage copyWith({
+  NotePage copyWith({
+    String? id,
     List<Stroke>? strokes,
     Color? backgroundColor,
   }) {
-    return DrawingPage(
+    return NotePage(
+      id: id ?? this.id,
       strokes: strokes ?? this.strokes,
       backgroundColor: backgroundColor ?? this.backgroundColor,
     );
@@ -22,17 +26,19 @@ class DrawingPage {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'strokes': strokes.map((stroke) => stroke.toJson()).toList(),
       'backgroundColor': backgroundColor.value,
     };
   }
 
-  factory DrawingPage.fromJson(Map<String, dynamic> json) {
-    return DrawingPage(
+  factory NotePage.fromJson(Map<String, dynamic> json) {
+    return NotePage(
+      id: json['id'],
       strokes: (json['strokes'] as List)
           .map((stroke) => Stroke.fromJson(stroke))
           .toList(),
-      backgroundColor: Color(json['backgroundColor'] as int),
+      backgroundColor: Color(json['backgroundColor']),
     );
   }
 } 
