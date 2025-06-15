@@ -58,7 +58,7 @@ jobs:
 
         #8 Build IPA ( IOS Build )
       - name: Build IPA
-        run: flutter build ipa --no-codesign
+        run: flutter build ipa
 
       - name: Compress Archives and IPAs
         run: |
