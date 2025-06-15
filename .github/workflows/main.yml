@@ -79,8 +79,10 @@ jobs:
       - name: Extract version from pubspec.yaml
         id: extract_version
         run: |
-          version=$(grep '^version: ' pubspec.yaml | cut -d ' ' -f 2 | tr -d '\r')
-          echo "VERSION=$version" >> $GITHUB_ENV
+          $version = Select-String '^version: ' pubspec.yaml | ForEach-Object {
+            ($_ -split ' ')[1].Trim()
+          }
+          echo "VERSION=$version" >> $env:GITHUB_ENV  
 
         #11 Check if Tag Exists
       - name: Check if Tag Exists
