@@ -87,12 +87,13 @@ jobs:
         #11 Check if Tag Exists
       - name: Check if Tag Exists
         id: check_tag
+        shell: bash
         run: |
           if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
           else
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
-          fi
+          fi  
 
         #12 Modify Tag if it Exists
       - name: Modify Tag
