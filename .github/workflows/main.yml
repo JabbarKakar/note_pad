@@ -56,9 +56,9 @@ jobs:
       - name: Build appBundle
         run: flutter build appbundle
 
-        #8 Build IPA ( IOS Build )
-      - name: Build IPA
-        run: flutter build ipa
+#        #8 Build IPA ( IOS Build )
+#      - name: Build IPA
+#        run: flutter build ios
 
       - name: Compress Archives and IPAs
         run: |
