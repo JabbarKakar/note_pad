@@ -84,24 +84,52 @@ jobs:
           }
           echo "VERSION=$version" >> $env:GITHUB_ENV  
 
-        #11 Check if Tag Exists
+#        #11 Check if Tag Exists
+#      - name: Check if Tag Exists
+#        id: check_tag
+#        shell: bash
+#        run: |
+#          if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
+#            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+#          else
+#            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+#          fi
+#
+#        #12 Modify Tag if it Exists
+#      - name: Modify Tag
+#        if: env.TAG_EXISTS == 'true'
+#        id: modify_tag
+#        run: |
+#          new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
+#          echo "VERSION=$new_version" >> $GITHUB_ENV
+
+
+
+          # 9 Check if tag exists
       - name: Check if Tag Exists
         id: check_tag
         shell: bash
         run: |
-          if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
-          fi  
+              if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
+                echo "TAG_EXISTS=true" >> $GITHUB_ENV
+              else
+                echo "TAG_EXISTS=false" >> $GITHUB_ENV
+              fi  
 
-        #12 Modify Tag if it Exists
+        # 10 Modify tag if exists
       - name: Modify Tag
         if: env.TAG_EXISTS == 'true'
-        id: modify_tag
         run: |
           new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
           echo "VERSION=$new_version" >> $GITHUB_ENV
+
+        # 11 Create Git Tag
+      - name: Create Git Tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag v${{ env.VERSION }}
+          git push origin v${{ env.VERSION }}
 
         #13 Create Release
       - name: Create Release
